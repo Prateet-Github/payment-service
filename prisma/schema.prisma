@@ -19,6 +19,7 @@ model User {
   updatedAt    DateTime @updatedAt
 
   orders       Order[]
+  idempotencyKeys IdempotencyKey[]
 
 }
 
@@ -47,4 +48,17 @@ model Payment {
   updatedAt       DateTime @updatedAt
 
   order           Order    @relation(fields: [orderId], references: [id])
+}
+
+model IdempotencyKey {
+  id          String   @id @default(uuid())
+  key         String   @unique
+  userId      String
+  requestHash String
+  response    Json?
+  status      String   // PROCESSING, SUCCESS, FAILED
+
+  createdAt   DateTime @default(now())
+
+  user        User     @relation(fields: [userId], references: [id])
 }
