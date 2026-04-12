@@ -65,10 +65,24 @@ export const login = async (req, res) => {
 
     return res.status(200).json({
       message: "Login successful",
-      user,
     });
   } catch (error) {
     console.error("Error in login controller:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const me = async (req, res) => {
+  try {
+    const user = await prisma.user.findUnique({ where: { id: req.user.id } });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({ user });
+  } catch (error) {
+    console.error("Error in me controller:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 };
