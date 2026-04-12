@@ -6,14 +6,16 @@ const env = {
   NODE_ENV: process.env.NODE_ENV,
   PORT: process.env.PORT,
   DATABASE_URL: process.env.DATABASE_URL,
-  STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY
+  STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
+  JWT_SECRET_KEY: process.env.JWT_SECRET_KEY,
 };
 
 const requiredVars = [
   "NODE_ENV",
   "PORT",
   "DATABASE_URL",
-  "STRIPE_SECRET_KEY"
+  "STRIPE_SECRET_KEY",
+  "JWT_SECRET_KEY",
 ];
 
 requiredVars.forEach((key) => {
