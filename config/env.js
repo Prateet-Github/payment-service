@@ -3,15 +3,17 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const env = {
-  NODE_ENV: process.env.NODE_ENV || "development",
-  PORT: process.env.PORT || 5001,
+  NODE_ENV: process.env.NODE_ENV,
+  PORT: process.env.PORT,
   DATABASE_URL: process.env.DATABASE_URL,
+  STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY
 };
 
 const requiredVars = [
   "NODE_ENV",
   "PORT",
   "DATABASE_URL",
+  "STRIPE_SECRET_KEY"
 ];
 
 requiredVars.forEach((key) => {
