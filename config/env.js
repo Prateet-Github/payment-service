@@ -8,6 +8,7 @@ const env = {
   DATABASE_URL: process.env.DATABASE_URL,
   STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
   JWT_SECRET_KEY: process.env.JWT_SECRET_KEY,
+  STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
 };
 
 const requiredVars = [
@@ -16,6 +17,7 @@ const requiredVars = [
   "DATABASE_URL",
   "STRIPE_SECRET_KEY",
   "JWT_SECRET_KEY",
+  "STRIPE_WEBHOOK_SECRET",
 ];
 
 requiredVars.forEach((key) => {
