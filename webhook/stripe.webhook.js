@@ -1,7 +1,7 @@
 import express from "express";
 import stripe from "../config/stripe.js";
-import { handlePaymentFailed, handlePaymentSuccess } from "./paymentStatus.js";
 import env from "../config/env.js";
+import { addPaymentJob } from "../queues/payment.queue.js";
 
 const router = express.Router();
 
@@ -27,18 +27,24 @@ router.post(
     // Handle events
     switch (event.type) {
       case "payment_intent.succeeded":
-        await handlePaymentSuccess(event.data.object);
+        await addPaymentJob({
+          type: "SUCCESS",
+          paymentIntent: event.data.object,
+        });
         break;
 
       case "payment_intent.payment_failed":
-        await handlePaymentFailed(event.data.object);
+        await addPaymentJob({
+          type: "FAILED",
+          paymentIntent: event.data.object,
+        });
         break;
 
       default:
         console.log(`Unhandled event type ${event.type}`);
     }
 
-    res.json({ received: true });
+    res.status(200).json({ received: true });
   },
 );
 
