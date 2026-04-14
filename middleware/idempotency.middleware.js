@@ -11,25 +11,31 @@ export const idempotency = async (req, res, next) => {
 
   const requestHash = hashRequest(req.body);
 
-  const existing = await prisma.idempotencyKey.findUnique({
+  let existing = await prisma.idempotencyKey.findUnique({
     where: { key },
   });
 
   if (existing) {
+    // different request
     if (existing.requestHash !== requestHash) {
       return res.status(400).json({
         message: "Idempotency key reused with different request",
       });
     }
 
-    // Same request? return stored response
+    if (existing.status === "PROCESSING") {
+      return res.status(409).json({
+        message: "Request already processing",
+      });
+    }
+
     if (existing.status === "SUCCESS") {
       return res.json(existing.response);
     }
   }
 
-  // create new entry
-  if (!existing) {
+  // for race condition: only one will succeed, others will fetch existing
+  try {
     await prisma.idempotencyKey.create({
       data: {
         key,
@@ -38,6 +44,24 @@ export const idempotency = async (req, res, next) => {
         status: "PROCESSING",
       },
     });
+  } catch (err) {
+    if (err.code === "P2002") {
+      console.log("Race detected → fetching existing");
+
+      existing = await prisma.idempotencyKey.findUnique({
+        where: { key },
+      });
+
+      if (existing.status === "SUCCESS") {
+        return res.json(existing.response);
+      }
+
+      return res.status(409).json({
+        message: "Request already processing",
+      });
+    }
+
+    throw err;
   }
 
   req.idempotencyKey = key;
