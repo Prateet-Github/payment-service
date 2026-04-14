@@ -9,6 +9,8 @@ const env = {
   STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
   JWT_SECRET_KEY: process.env.JWT_SECRET_KEY,
   STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
+  REDIS_HOST: process.env.REDIS_HOST,
+  REDIS_PORT: process.env.REDIS_PORT,
 };
 
 const requiredVars = [
@@ -18,6 +20,8 @@ const requiredVars = [
   "STRIPE_SECRET_KEY",
   "JWT_SECRET_KEY",
   "STRIPE_WEBHOOK_SECRET",
+  "REDIS_HOST",
+  "REDIS_PORT",
 ];
 
 requiredVars.forEach((key) => {
