@@ -12,6 +12,8 @@ export const paymentWorker = new Worker(
 
     console.log("Processing job:", type, paymentIntent.id);
 
+    // throw new Error("Simulated failure"); // Simulate failure for testing dlq
+
     if (type === "SUCCESS") {
       await handlePaymentSuccess(paymentIntent);
     }
@@ -33,6 +35,16 @@ paymentWorker.on("completed", (job) => {
   console.log(`Job completed: ${job.id}`);
 });
 
+// paymentWorker.on("failed", (job, err) => {
+//   console.error(`Job failed: ${job.id}`, err.message);
+// });
+
 paymentWorker.on("failed", (job, err) => {
-  console.error(`Job failed: ${job.id}`, err.message);
+  if (job.attemptsMade === job.opts.attempts) {
+    console.error(`Job moved to DLQ: ${job.id}`, err.message);
+  } else {
+    console.log(
+      `Retrying job ${job.id} (${job.attemptsMade}/${job.opts.attempts})`,
+    );
+  }
 });

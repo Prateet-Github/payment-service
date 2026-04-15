@@ -4,7 +4,7 @@ import { redis } from "../config/redis.js";
 export const paymentQueue = new Queue("payment-queue", {
   connection: redis,
   defaultJobOptions: {
-    attempts: 3, // 3 retries on failure
+    attempts: 5, // 5 retries on failure
     backoff: {
       type: "exponential",
       delay: 1000,
