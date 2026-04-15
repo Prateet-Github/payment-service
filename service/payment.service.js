@@ -13,7 +13,7 @@ export const createPaymentIntent = async ({ userId, amount }) => {
 
   // 2. create stripe paymentIntent
   const paymentIntent = await stripe.paymentIntents.create({
-    amount, 
+    amount,
     currency: "inr",
     payment_method_types: ["card"],
     metadata: {

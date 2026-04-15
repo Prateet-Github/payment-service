@@ -12,7 +12,7 @@ export const paymentWorker = new Worker(
 
     console.log("Processing job:", type, paymentIntent.id);
 
-    // throw new Error("Simulated failure"); // Simulate failure for testing dlq
+    // throw new Error("Simulated failure");
 
     if (type === "SUCCESS") {
       await handlePaymentSuccess(paymentIntent);
