@@ -11,6 +11,7 @@ const env = {
   STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
   REDIS_HOST: process.env.REDIS_HOST,
   REDIS_PORT: process.env.REDIS_PORT,
+  TOKEN: process.env.TOKEN,
 };
 
 const requiredVars = [
@@ -22,6 +23,7 @@ const requiredVars = [
   "STRIPE_WEBHOOK_SECRET",
   "REDIS_HOST",
   "REDIS_PORT",
+  "TOKEN",
 ];
 
 requiredVars.forEach((key) => {
